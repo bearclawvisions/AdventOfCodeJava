@@ -15,4 +15,10 @@ public class SecretEntranceTest {
         int result = SecretEntrance.part1(TEST_INPUT);
         assertEquals(3, result);
     }
+
+    @Test
+    public void testPart2() {
+        int result = SecretEntrance.part2(TEST_INPUT);
+        assertEquals(6, result);
+    }
 }
