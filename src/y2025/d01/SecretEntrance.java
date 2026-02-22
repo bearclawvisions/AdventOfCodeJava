@@ -17,7 +17,7 @@ public class SecretEntrance {
 
         for (String line : input) {
             int rotation = parseRotation(line).distance;
-            dialPosition = calculateNewPosition(dialPosition, rotation).newPosition;
+            dialPosition = calculateNewPosition(dialPosition, rotation, false).newPosition;
 
             if (dialPosition == DIAL_MIN) {
                 zeroCount++;
@@ -30,27 +30,39 @@ public class SecretEntrance {
     public static int part2(List<String> input) {
         int dialPosition = 50;
         int zeroCount = 0;
+        boolean startedAtZero = false;
 
         for (String line : input) {
+            if (dialPosition == DIAL_MIN) {
+                startedAtZero = true; // in part2 adjust for when 0 is the starting position
+            }
+
             RotationResult rotationResult = parseRotation(line);
             int rotation = rotationResult.distance;
             zeroCount += rotationResult.zerosPassed;
 
-            PositionResult positionResult = calculateNewPosition(dialPosition, rotation);
+            PositionResult positionResult = calculateNewPosition(dialPosition, rotation, startedAtZero);
             dialPosition = positionResult.newPosition;
             zeroCount += positionResult.zerosPassed;
 
-//            if (dialPosition == DIAL_MIN) {
-//                zeroCount++;
+            System.out.println(String.format("Rotation: %d Dial position: %d, zero count: %d", rotation, dialPosition, zeroCount));
+            if (dialPosition == DIAL_MIN) {
+                zeroCount++;
+            }
+
+//            if (startedAtZero) {
+//                zeroCount--;
 //            }
+
+            startedAtZero = false;
         }
 
         return zeroCount;
     }
 
-    private static PositionResult calculateNewPosition(int dialPosition, int rotation) {
+    private static PositionResult calculateNewPosition(int dialPosition, int rotation, boolean startedAtZero) {
         int newPosition = dialPosition + rotation;
-        int zerosPassed = 0;
+        int zerosPassed = startedAtZero ? -1 : 0;
 
         if (newPosition > DIAL_MAX) { // only possible when turning clockwise
             int diff = newPosition - DIAL_TICKS; // -1 adjust for the 0, since it physically counts as a tick
@@ -68,9 +80,10 @@ public class SecretEntrance {
     private static RotationResult parseRotation(String line) {
         String direction = line.substring(0, 1);
         int distance = Integer.parseInt(line.substring(1));
-        int zerosPassed = distance / DIAL_TICKS;
+        int zerosPassed = 0;
 
         if (distance > DIAL_MAX) {
+            zerosPassed = distance / DIAL_TICKS;
             distance = distance % DIAL_TICKS;
         }
 
@@ -80,5 +93,4 @@ public class SecretEntrance {
 
         return new RotationResult(distance, zerosPassed);
     }
-
 }
