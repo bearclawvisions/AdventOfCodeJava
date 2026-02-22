@@ -10,7 +10,7 @@ public class Main {
     static void main() throws Exception {
         List<String> input = InputReader.readInput("202502.txt");
 
-        TimingUtils.timeMethodAndReturnAnswerAsLong("Part 1", () -> GiftShop.part1(input)); //
+        TimingUtils.timeMethodAndReturnAnswerAsLong("Part 1", () -> GiftShop.part1(input)); // 13108371860
 //        TimingUtils.timeMethodAndReturnAnswer("Part 2", () -> SecretEntrance.part2(input)); //
     }
 }

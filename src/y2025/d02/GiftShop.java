@@ -24,22 +24,16 @@ public class GiftShop {
         long sum = 0;
 
         for (long digit = min; digit <= max; digit++) {
-            sum += FindDuplicateDigits(digit);
+            String digitAsString = String.valueOf(digit);
+            int halfDigitLength = digitAsString.length() / 2;
+            String firstHalf = digitAsString.substring(0, halfDigitLength);
+            String secondHalf = digitAsString.substring(halfDigitLength);
+
+            if (firstHalf.equals(secondHalf)) {
+                sum += digit;
+            }
         }
 
         return sum;
-    }
-
-    private static long FindDuplicateDigits(long digit) {
-        String digitAsString = String.valueOf(digit);
-        int halfDigitLength = digitAsString.length() / 2;
-        String firstHalf = digitAsString.substring(0, halfDigitLength);
-        String secondHalf = digitAsString.substring(halfDigitLength);
-
-        if (firstHalf.equals(secondHalf)) {
-            return digit;
-        }
-
-        return 0;
     }
 }
