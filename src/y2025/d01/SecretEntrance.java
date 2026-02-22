@@ -3,9 +3,6 @@ package y2025.d01;
 import java.util.List;
 
 public class SecretEntrance {
-    private record RotationResult(int distance, int zerosPassed) {}
-    private record PositionResult(int newPosition, int zerosPassed) {}
-
     private final static String LEFT = "L";
     private final static int DIAL_MIN = 0;
     private final static int DIAL_MAX = 99;
@@ -16,8 +13,8 @@ public class SecretEntrance {
         int zeroCount = 0;
 
         for (String line : input) {
-            int rotation = parseRotation(line).distance;
-            dialPosition = calculateNewPosition(dialPosition, rotation, false).newPosition;
+            int rotation = parseRotation(line);
+            dialPosition = calculateNewPosition(dialPosition, rotation);
 
             if (dialPosition == DIAL_MIN) {
                 zeroCount++;
@@ -30,67 +27,54 @@ public class SecretEntrance {
     public static int part2(List<String> input) {
         int dialPosition = 50;
         int zeroCount = 0;
-        boolean startedAtZero = false;
 
         for (String line : input) {
-            if (dialPosition == DIAL_MIN) {
-                startedAtZero = true; // in part2 adjust for when 0 is the starting position
-            }
-
-            RotationResult rotationResult = parseRotation(line);
-            int rotation = rotationResult.distance;
-            zeroCount += rotationResult.zerosPassed; // todo fix this
-
-            PositionResult positionResult = calculateNewPosition(dialPosition, rotation, startedAtZero);
-            dialPosition = positionResult.newPosition;
-            zeroCount += positionResult.zerosPassed; // todo fix this
-
-//            System.out.println(String.format("Rotation: %d Dial position: %d, zero count: %d", rotation, dialPosition, zeroCount));
-            if (dialPosition == DIAL_MIN) {
-                zeroCount++;
-            }
-
-//            if (startedAtZero) {
-//                zeroCount--;
-//            }
-
-            startedAtZero = false;
+            int rotation = parseRotation(line);
+            dialPosition += rotation;
+            zeroCount += calculateZerosPassed(dialPosition, rotation);
+            dialPosition = Math.floorMod(dialPosition, DIAL_TICKS);
         }
 
         return zeroCount;
     }
 
-    private static PositionResult calculateNewPosition(int dialPosition, int rotation, boolean startedAtZero) {
+    private static int calculateNewPosition(int dialPosition, int rotation) {
         int newPosition = dialPosition + rotation;
-        int zerosPassed = startedAtZero ? -1 : 0;
 
         if (newPosition > DIAL_MAX) { // only possible when turning clockwise
             int diff = newPosition - DIAL_TICKS; // -1 adjust for the 0, since it physically counts as a tick
-            zerosPassed++;
-            return new PositionResult(DIAL_MIN + diff, zerosPassed);
+            return DIAL_MIN + diff;
         } else if (newPosition < DIAL_MIN) { // only possible when turning counterclockwise
             newPosition *= -1; // adjust for negative
-            zerosPassed++;
-            return new PositionResult(DIAL_TICKS - newPosition, zerosPassed); // +1 adjust for the 0, since it physically counts as a tick
+            return DIAL_TICKS - newPosition; // +1 adjust for the 0, since it physically counts as a tick
         }
 
-        return new PositionResult(newPosition, zerosPassed);
+        return newPosition;
     }
 
-    private static RotationResult parseRotation(String line) {
+    private static int parseRotation(String line) {
         String direction = line.substring(0, 1);
         int distance = Integer.parseInt(line.substring(1));
-        int zerosPassed = 0;
-
-        if (distance > DIAL_MAX) {
-            zerosPassed = distance / DIAL_TICKS;
-            distance = distance % DIAL_TICKS;
-        }
 
         if (direction.equals(LEFT)) {
             distance *= -1; // turn to the left / counterclockwise
         }
 
-        return new RotationResult(distance, zerosPassed);
+        return distance;
+    }
+
+    private static int calculateZerosPassed(int newPosition, int rotation) {
+        if (rotation > 0) {
+            return newPosition / DIAL_TICKS;
+        } else {
+            int zerosPassed = (DIAL_TICKS - newPosition) / DIAL_TICKS;
+
+            boolean startedAtZero = newPosition - rotation == 0;
+            if (startedAtZero) {
+                zerosPassed--;
+            }
+
+            return zerosPassed;
+        }
     }
 }
