@@ -32,4 +32,18 @@ public class TimingUtils {
             throw e;
         }
     }
+
+    public static void timeMethodAndReturnAnswerAsLong(String label, Callable<Long> task) throws Exception {
+        try {
+            long startTime = System.nanoTime();
+
+            long result = task.call();
+
+            long durationMs = (System.nanoTime() - startTime) / 1_000_000;
+            System.out.printf("%s %d - Execution time: %d ms%n", label, result, durationMs);
+        } catch (Exception e) {
+            System.out.println(label + " - Execution failed");
+            throw e;
+        }
+    }
 }
