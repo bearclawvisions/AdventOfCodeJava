@@ -39,13 +39,13 @@ public class SecretEntrance {
 
             RotationResult rotationResult = parseRotation(line);
             int rotation = rotationResult.distance;
-            zeroCount += rotationResult.zerosPassed;
+            zeroCount += rotationResult.zerosPassed; // todo fix this
 
             PositionResult positionResult = calculateNewPosition(dialPosition, rotation, startedAtZero);
             dialPosition = positionResult.newPosition;
-            zeroCount += positionResult.zerosPassed;
+            zeroCount += positionResult.zerosPassed; // todo fix this
 
-            System.out.println(String.format("Rotation: %d Dial position: %d, zero count: %d", rotation, dialPosition, zeroCount));
+//            System.out.println(String.format("Rotation: %d Dial position: %d, zero count: %d", rotation, dialPosition, zeroCount));
             if (dialPosition == DIAL_MIN) {
                 zeroCount++;
             }
