@@ -43,7 +43,8 @@ public class GiftShop {
     }
 
     private static boolean isInvalidId(long digit) {
-        String digitAsString = String.valueOf(digit);
+//        String digitAsString = String.valueOf(digit);
+        String digitAsString = Long.toString(digit);
         int length = digitAsString.length();
         int halfLength = length / 2;
 
