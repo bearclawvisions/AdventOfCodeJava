@@ -2,7 +2,6 @@ package y2025.d02;
 
 import common.InputReader;
 import common.TimingUtils;
-import y2025.d01.SecretEntrance;
 
 import java.util.List;
 
