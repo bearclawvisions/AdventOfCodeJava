@@ -20,6 +20,22 @@ public class GiftShop {
         return sum;
     }
 
+    public static long part2(List<String> input) {
+        String inputAsLine = input.getFirst(); // there is only one line
+        List<String> idRanges = List.of(inputAsLine.split(","));
+        long sum = 0;
+
+        for (String idRange : idRanges) {
+            String[] range = idRange.split("-");
+            long min = Long.parseLong(range[0]);
+            long max = Long.parseLong(range[1]);
+
+            sum += FindInvalidIds(min, max);
+        }
+
+        return sum;
+    }
+
     private static long FindInvalidIds(long min, long max) {
         long sum = 0;
 

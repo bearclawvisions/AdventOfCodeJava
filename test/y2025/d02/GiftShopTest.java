@@ -14,6 +14,12 @@ public class GiftShopTest {
     @Test
     public void testPart1() {
         long result = GiftShop.part1(TEST_INPUT);
-        assertEquals(1227775554, result);
+        assertEquals(1227775554L, result);
+    }
+
+    @Test
+    public void testPart2() {
+        long result = GiftShop.part2(TEST_INPUT);
+        assertEquals(4174379265L, result);
     }
 }

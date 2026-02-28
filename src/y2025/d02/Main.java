@@ -11,6 +11,6 @@ public class Main {
         List<String> input = InputReader.readInput("202502.txt");
 
         TimingUtils.timeMethodAndReturnAnswerAsLong("Part 1", () -> GiftShop.part1(input)); // 13108371860
-//        TimingUtils.timeMethodAndReturnAnswer("Part 2", () -> SecretEntrance.part2(input)); //
+        TimingUtils.timeMethodAndReturnAnswerAsLong("Part 2", () -> GiftShop.part2(input)); //
     }
 }
